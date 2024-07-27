@@ -1,9 +1,9 @@
 import React from 'react';
-import { useFilmContext } from '@/context/FilmContext';
+import { useFilmContext } from '../../context/FilmContext';
 import Header from '../common/header/Header';
 import Footer from '../common/footer';
 import classNames from 'classnames';
-import { useDarkMode } from '@/context/darkModeContext';
+import { useDarkMode } from '../../context/darkModeContext';
 
 export default function WatchMoviePage() {
   const { currentFilm } = useFilmContext();

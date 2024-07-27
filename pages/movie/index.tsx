@@ -1,6 +1,8 @@
-import Layout from "@/components/Layout";
-import PreviewPage from "@/components/pages/PreviewPage";
-import { useFilmContext } from "@/context/FilmContext";
+import Layout from "../../components/Layout";
+import PreviewPage from "../../components/pages/PreviewPage";
+import { useFilmContext } from "../../context/FilmContext";
+import SearchModal from "../../components/composite/modal/SearchModal";
+import React from "react";
 
 const Preview = () => {
   const { currentFilm } = useFilmContext();
@@ -13,6 +15,7 @@ const Preview = () => {
       }}
     >
       <PreviewPage />
+      <SearchModal/>
     </Layout>
   );
 }

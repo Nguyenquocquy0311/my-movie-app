@@ -1,6 +1,8 @@
-import Layout from "@/components/Layout";
-import WatchMoviePage from "@/components/pages/WatchMoviePage";
-import { useFilmContext } from "@/context/FilmContext";
+import Layout from "../../components/Layout";
+import WatchMoviePage from "../../components/pages/WatchMoviePage";
+import { useFilmContext } from "../../context/FilmContext";
+import SearchModal from "../../components/composite/modal/SearchModal";
+import React from "react";
 
 const WatchMovie = () => {
   const { currentFilm } = useFilmContext();
@@ -13,6 +15,7 @@ const WatchMovie = () => {
       }}
     >
       <WatchMoviePage />
+      <SearchModal/>
     </Layout>
   );
 }
