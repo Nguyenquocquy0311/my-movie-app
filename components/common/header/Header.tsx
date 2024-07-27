@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 import { Button, Tooltip } from "@mui/material";
-import AbcSharpIcon from "@mui/icons-material/AbcSharp";
 import { useRouter } from "next/router";
 import {
   DarkMode,
@@ -53,7 +52,11 @@ const Header = () => {
       )}
     >
       <div className="cursor-pointer" onClick={goToHome}>
-        <AbcSharpIcon fontSize="large" />
+        <img
+          src="https://movie-web-two-jade.vercel.app/img/logo.a124619a.png"
+          alt="Logo"
+          className="h-24"
+        />
       </div>
       <div className="flex justify-end space-x-4">
         <div className="flex space-x-4">

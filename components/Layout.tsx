@@ -25,6 +25,7 @@ const Layout = ({ children, customMeta, meta }: Props) => {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
         <title>{meta?.title}</title>
+        <link rel="icon" href="https://w7.pngwing.com/pngs/958/942/png-transparent-television-film-cinema-popcorn-popcorn-television-food-film-thumbnail.png" />
         <meta name="description" content={meta?.description} />
         <meta itemProp="name" content={meta?.title} />
         <meta name="twitter:title" content={meta?.title} />
