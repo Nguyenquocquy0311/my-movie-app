@@ -1,31 +1,65 @@
 import React from 'react';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
-import { getDarkMode } from '@/slices/redux';
-import { Instagram, Twitter, YouTube } from '@mui/icons-material';
+import { Facebook, Twitter, Instagram, YouTube } from '@mui/icons-material';
 
 const Footer = () => {
-    const isDarkMode = useSelector(getDarkMode);
-
+ 
     return (
-        <div className={classNames('h-auto','bg-slate-900 text-white')}>
-            <div className={classNames('flex px-10 items-center justify-between h-28')}>
-                <div className='text-[24px] font-bold'>NextJS Movie app PRO</div>
-                <div className='flex items-center space-x-4'>
-                    <ul className='flex space-x-6 mx-6'>
-                        <li className='flex items-center'>Contact Us</li>
-                        <li className='flex items-center'>About Us</li>
-                    </ul>
-                    <div className='flex space-x-5'>
-                        <Instagram className='hover:text-slate-500 cursor-pointer' />
-                        <Twitter className='hover:text-slate-500 cursor-pointer' />
-                        <YouTube className='hover:text-slate-500 cursor-pointer' />
+        <div className={classNames('h-auto', 'bg-slate-900 text-white')}>
+            <div className='px-20 py-6'>
+                <div className='flex justify-between'>
+                    <div className='w-1/2'>
+                        <div className='max-w-[480px]'>
+                            <div className='text-2xl font-bold'>PTIT-movie.app</div>
+                            <p className='mt-2'>
+                                <span className='font-bold text-blue-300'>PTIT-movie</span> - Trang xem phim Online với giao diện mới được bố trí và thiết kế thân thiện với người dùng. Nguồn phim được tổng hợp từ các website lớn với đa dạng các đầu phim và thể loại vô cùng phong phú.
+                            </p>
+                        </div>
+                    </div>
+                    <div className='w-1/2 flex space-x-6'>
+                        <div className='w-1/3'>
+                            <div className='text-xl font-bold'>Phim mới</div>
+                            <ul className='mt-2'>
+                                <li className='text-slate-500'>Phim Khoa Học</li>
+                                <li className='text-slate-500'>Phim Kinh Dị</li>
+                                <li className='text-slate-500'>Phim Chiếu Rạp</li>
+                                <li className='text-slate-500'>Phim Hình Sự</li>
+                                <li className='text-slate-500'>Phim Hành Động</li>
+                            </ul>
+                        </div>
+                        <div className='w-1/3'>
+                            <div className='text-xl font-bold'>Phim hay</div>
+                            <ul className='mt-2'>
+                                <li className='text-slate-500'>Phim Âu Mỹ</li>
+                                <li className='text-slate-500'>Phim Hàn Quốc</li>
+                                <li className='text-slate-500'>Phim Trung Quốc</li>
+                                <li className='text-slate-500'>Phim Nhật Bản</li>
+                                <li className='text-slate-500'>Phim Thái Lan</li>
+                            </ul>
+                        </div>
+                        <div className='w-1/3'>
+                        <div className='text-xl font-bold'>Thông tin</div>
+                        <ul className='mt-2'>
+                            <li className='text-slate-500'><a href='/policy'>Giới thiệu</a></li>
+                            <li className='text-slate-500'>Liên hệ chúng tôi</li>
+                            <li className='text-slate-500'>Điều khoản sử dụng</li>
+                            <li className='text-slate-500'>Chính sách riêng tư</li>
+                        </ul>
+                    </div>
                     </div>
                 </div>
-            </div>
 
-            <div className='flex items-center justify-center border-t-[0.1px] border-t-slate-500 h-24 px-5 w-[150vh] mx-auto'>
-                ©Copyright 2024 My-movie-app.com. All rights reserved.
+                <div className='mt-6 flex justify-between border-t border-slate-700 pt-4'>
+                    <div className='w-full'>
+                        © Phimmoi
+                    </div>
+                    <div className='flex space-x-8 justify-center'>
+                        <Facebook className='hover:text-blue-400 cursor-pointer' />
+                        <Twitter className='hover:text-blue-300 cursor-pointer' />
+                        <Instagram className='hover:text-pink-300 cursor-pointer' />
+                        <YouTube className='hover:text-red-500 cursor-pointer' />
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -20,13 +20,14 @@ export default function WatchMoviePage() {
       <Header />
       <div className="pt-28 px-6 pb-4">
         <iframe
-          width="100%"
+          width="1200"
           height="600"
           src={`https://www.youtube.com/embed/${videoId}`}
           title={currentFilm.title}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          className='mx-auto'
         />
         <div className='comment-by-fb mt-10 mx-24 h-[200px]'>
           {/* Header */}
