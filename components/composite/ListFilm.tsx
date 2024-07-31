@@ -295,28 +295,29 @@ const ListFilm = () => {
   return (
     <div className="px-24 mt-4 pb-8">
       {/* Section 1: Slider */}
-      <div className="border-b-[1px] border-slate-500">
+      <div className="mb-14 border-slate-500">
         <Box mb={4}>
           {films.length > 0 && (
-            <Card>
+            <Card className="relative">
               <CardMedia
                 component="img"
                 image={films[currentIndex]?.image || "default-image-url"}
                 alt={films[currentIndex]?.title || "Default Title"}
-                className="h-[600px]"
+                className="h-[600px] object-cover"
               />
-              <CardContent>
-                <Typography variant="h5">
+              <CardContent className="absolute bottom-4 left-4 bg-opacity-75 bg-gray-800 text-white p-4 rounded-lg">
+                <Typography variant="h5" className="mb-2">
                   {films[currentIndex]?.title || "Default Title"}
                 </Typography>
                 <Typography variant="subtitle1">
+                  Đạo diễn:{" "}
                   {films[currentIndex]?.director || "Default Director"}
                 </Typography>
                 <Typography variant="subtitle2">
-                  {films[currentIndex]?.year || "Default Year"}
+                  Năm: {films[currentIndex]?.year || "Default Year"}
                 </Typography>
                 <Button
-                  className="z-0"
+                  className="z-10 mt-2"
                   variant="contained"
                   color="primary"
                   onClick={() => handleDetailsClick(films[currentIndex])}
@@ -330,13 +331,15 @@ const ListFilm = () => {
       </div>
 
       {/* Section 2: Grid */}
-      <p className="text-[32px] text-blue-600 pb-6">Phim nổi bật</p>
+      <Typography variant="h4" className="text-blue-600 pb-6 font-bold border-t-[2px] border-blue-500">
+        Phim nổi bật
+      </Typography>
       <Grid container spacing={4}>
         {paginatedFilms.map((film, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
               className={classNames(
-                "cursor-pointer hover:shadow-2xl h-[500px]",
+                "cursor-pointer hover:shadow-2xl transition-shadow duration-300",
                 darkMode ? "hover:shadow-slate-500" : "hover:shadow-gray-900"
               )}
             >
@@ -344,14 +347,20 @@ const ListFilm = () => {
                 component="img"
                 image={film.subImage}
                 alt={film.title}
-                className="h-[300px]"
+                className="h-[300px] object-cover"
               />
-              <CardContent>
-                <Typography variant="h6">{film.title}</Typography>
-                <Typography variant="subtitle1">{film.director}</Typography>
-                <Typography variant="subtitle2">{film.year}</Typography>
+              <CardContent className={classNames(darkMode && 'text-white bg-slate-900')}>
+                <Typography variant="h6" className="font-bold mb-2">
+                  {film.title}
+                </Typography>
+                <Typography variant="subtitle1" className="mb-1">
+                  Đạo diễn: {film.director}
+                </Typography>
+                <Typography variant="subtitle2" className="mb-2">
+                  Năm: {film.year}
+                </Typography>
                 <Button
-                  variant="contained"
+                  variant={!darkMode ? "contained" : "outlined"}
                   color="primary"
                   onClick={() => handleDetailsClick(film)}
                 >
