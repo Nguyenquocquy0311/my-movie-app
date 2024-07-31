@@ -48,7 +48,7 @@ const Header = () => {
   return (
     <div
       className={classNames(
-        "h-20 shadow-lg px-16 flex items-center justify-between fixed w-full z-50",
+        "h-20 shadow-xl px-16 flex items-center justify-between fixed w-full z-50",
         darkMode ? "bg-slate-900 text-white" : "bg-white"
       )}
     >

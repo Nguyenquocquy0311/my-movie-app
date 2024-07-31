@@ -305,7 +305,7 @@ const ListFilm = () => {
                 alt={films[currentIndex]?.title || "Default Title"}
                 className="h-[600px] object-cover"
               />
-              <CardContent className="absolute bottom-4 left-4 bg-opacity-75 bg-gray-800 text-white p-4 rounded-lg">
+              <CardContent className={classNames("absolute bottom-4 left-4 bg-gray-800 text-white p-4 rounded-lg", darkMode ? 'bg-opacity-90' : 'bg-opacity-30')}>
                 <Typography variant="h5" className="mb-2">
                   {films[currentIndex]?.title || "Default Title"}
                 </Typography>
