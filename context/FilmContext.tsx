@@ -7,6 +7,7 @@ interface Film {
   image: string;
   url: string;
   type: string;
+  desc: string;
 }
 
 interface FilmContextProps {

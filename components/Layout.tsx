@@ -6,16 +6,21 @@ interface Props {
     title: string;
     description: string;
   };
-  customMeta?: JSX.Element;
   children?: React.ReactNode;
+  noindex?: boolean;
 }
 
-const Layout = ({ children, customMeta, meta }: Props) => {
-  const router = useRouter();
+const Layout = ({ children, meta, noindex = false }: Props) => {
 
   return (
     <>
       <Head>
+        <meta
+          name="robots"
+          content={
+            noindex ? 'noindex, nofollow' : 'index, follow'
+          }
+        />
         <meta charSet="UTF-8" />
         <meta name="google" content="notranslate" />
         <meta name="yandex-verification" content="556d2c4c4767a8f1" />

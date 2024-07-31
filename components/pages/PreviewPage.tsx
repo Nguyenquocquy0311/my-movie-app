@@ -1,68 +1,113 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import { useFilmContext } from '../../context/FilmContext';
-import Header from '../common/header/Header';
-import Footer from '../common/footer';
-import classNames from 'classnames';
-import { useDarkMode } from '../../context/darkModeContext';
-import { Box, Breadcrumbs, Button, Card, CardContent, CardMedia, Link, Typography } from '@mui/material';
-import { Home, Mediation } from '@mui/icons-material';
+import React from "react";
+import { useRouter } from "next/router";
+import { useFilmContext } from "../../context/FilmContext";
+import Header from "../common/header/Header";
+import Footer from "../common/Footer";
+import classNames from "classnames";
+import { useDarkMode } from "../../context/darkModeContext";
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Link,
+  Typography,
+} from "@mui/material";
+import { Home, Movie } from "@mui/icons-material";
 
 export default function PreviewPage() {
   const { currentFilm } = useFilmContext();
   const router = useRouter();
   const { darkMode } = useDarkMode();
+  let theloai = "Phim bộ";
 
   if (!currentFilm) {
     return <div>No film selected</div>;
+  } else {
+    if (currentFilm.type == "phim-le") theloai = "Phim lẻ";
+    if (currentFilm.type == "tv-show") theloai = "TV Show";
+    if (currentFilm.type == "anime") theloai = "Anime";
   }
 
   const handleWatchFilm = () => {
-    router.push('/movie/watch-movie');
+    router.push("/movie/watch-movie");
   };
 
   return (
-    <div className={classNames(darkMode ? 'bg-slate-800' : 'bg-white')}>
+    <div
+      className={classNames(
+        darkMode ? "bg-slate-800 text-slate-100" : "bg-white text-slate-800"
+      )}
+    >
       <Header />
       <div className="pt-24 px-24">
-        <div className='pb-6 pt-2'>
-          <Breadcrumbs aria-label="breadcrumb" className={classNames(darkMode ? 'text-slate-100' : 'text-slate-700')}>
+        <div className="pb-6 pt-2">
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            className={classNames(
+              darkMode ? "text-slate-100" : "text-slate-700"
+            )}
+          >
             <Link
               underline="hover"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               color="inherit"
               href="/"
             >
-              <Home sx={{ mr: 0.5 }}/>
+              <Home sx={{ mr: 0.5 }} />
               Trang chủ
             </Link>
             <Link
               underline="hover"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               color="inherit"
-              href="/movie"
             >
-              <Mediation sx={{ mr: 0.5 }} />
+              <Movie sx={{ mr: 0.5 }} />
               {currentFilm.title}
             </Link>
           </Breadcrumbs>
         </div>
         <Box mb={4}>
-          <Card>
+          <Card className="flex flex-col md:flex-row">
             <CardMedia
               component="img"
               image={currentFilm.image}
               alt={currentFilm.title}
-              className='h-[600px]'
+              className="md:w-1/3 h-auto"
             />
-            <CardContent>
-              <Typography variant="h5">{currentFilm.title}</Typography>
-              <Typography variant="subtitle1">Đạo diễn: {currentFilm.director}</Typography>
-              <Typography variant="subtitle2">Năm ra mắt: {currentFilm.year}</Typography>
-              <Typography variant="subtitle2">Thể loại: {currentFilm.type}</Typography>
-              <Typography variant="subtitle2">Chất lượng: HD</Typography>
-              <Typography variant="subtitle2">Phụ đề: Vietsub</Typography>
-              <Button variant={!darkMode ? "contained" : "outlined"} onClick={handleWatchFilm}>Xem phim</Button>
+            <CardContent className="flex flex-col justify-between p-6 md:w-2/3">
+              <div>
+                <Typography variant="h5" className="mb-2 font-bold">
+                  {currentFilm.title}
+                </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Đạo diễn:</b> {currentFilm.director}
+                </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Năm ra mắt:</b> {currentFilm.year}
+                </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Thể loại:</b> {theloai}
+                </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Chất lượng:</b> HD
+                </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Phụ đề:</b> Vietsub
+                </Typography>
+                <Typography variant="subtitle1" className="mb-4">
+                  <b>Nội dung:</b> {currentFilm.desc}
+                </Typography>
+              </div>
+              <Button
+                variant={!darkMode ? "contained" : "outlined"}
+                onClick={handleWatchFilm}
+                className="self-start"
+              >
+                Xem phim
+              </Button>
             </CardContent>
           </Card>
         </Box>

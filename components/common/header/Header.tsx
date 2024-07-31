@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { Button, Tooltip } from "@mui/material";
+import { Avatar, Button, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import {
   DarkMode,
   DarkModeOutlined,
   LightMode,
+  Login,
   SearchOutlined,
 } from "@mui/icons-material";
 import { useFilmType } from "../../../context/filmTypeContext";
@@ -58,7 +59,7 @@ const Header = () => {
           className="h-24"
         />
       </div>
-      <div className="flex justify-end space-x-4">
+      <div className="flex justify-end space-x-5">
         <div className="flex space-x-4">
           <div
             className={classNames(
@@ -121,6 +122,15 @@ const Header = () => {
           onClick={handleDarkTheme}
         >
           {!darkMode ? <DarkModeOutlined /> : <LightMode />}
+        </Tooltip>
+                
+        <Tooltip
+          title={'Đăng nhập'}
+          className="cursor-pointer my-auto"
+          // onClick={}  
+        >
+        {/* {} ? <Login/> : <Avatar/> */}
+        <Login />
         </Tooltip>
       </div>
     </div>
