@@ -5,8 +5,14 @@ import Footer from "../common/Footer";
 import classNames from "classnames";
 import { useDarkMode } from "../../context/darkModeContext";
 import { Avatar, Breadcrumbs, Link, Rating } from "@mui/material";
-import StarIcon from '@mui/icons-material/Star';
-import { AccountBox, AccountCircle, Home, Movie, PlayCircleOutline } from "@mui/icons-material";
+import StarIcon from "@mui/icons-material/Star";
+import {
+  AccountBox,
+  AccountCircle,
+  Home,
+  Movie,
+  PlayCircleOutline,
+} from "@mui/icons-material";
 
 interface Feedback {
   vote: number;
@@ -26,28 +32,53 @@ export default function WatchMoviePage() {
 
   const videoId = new URL(currentFilm.url).searchParams.get("v");
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setCommentInput(event.target.value);
   };
 
+  const handleVoteChange = (event: {
+    target: { value: React.SetStateAction<number> };
+  }) => {
+    setValueVote(event.target.value);
+  };
+
   const handleSendFeedback = () => {
-    if (commentInput.trim() !== "" || valueVote > 0) {
-      const newFeedback: Feedback = { vote: valueVote, cmt: commentInput || null };
-      setFeedback([...feedback, newFeedback]);
-      setCommentInput("");
-      setValueVote(0); // Reset the vote after sending
+    if (!window.localStorage.getItem("user-info")) {
+      alert("Đăng nhập để bình luận !!!");
+    } else {
+      if (commentInput.trim() !== "" || valueVote > 0) {
+        const newFeedback: Feedback = {
+          vote: valueVote,
+          cmt: commentInput || null,
+        };
+        setFeedback([...feedback, newFeedback]);
+        setCommentInput("");
+        setValueVote(0);
+      }
     }
   };
 
   return (
-    <div className={classNames(darkMode ? "bg-slate-800" : "bg-white", "min-h-screen")}>
+    <div
+      className={classNames(
+        darkMode ? "bg-slate-800" : "bg-white",
+        "min-h-screen"
+      )}
+    >
       <Header />
       <div className="pt-28 px-6 pb-4">
-        <div className='pb-6 pt-2 mx-auto w-[1200px]'>
-          <Breadcrumbs aria-label="breadcrumb" className={classNames(darkMode ? 'text-slate-100' : 'text-slate-700')}>
+        <div className="pb-6 pt-2 mx-auto w-[1200px]">
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            className={classNames(
+              darkMode ? "text-slate-100" : "text-slate-700"
+            )}
+          >
             <Link
               underline="hover"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               color="inherit"
               href="/"
             >
@@ -56,7 +87,7 @@ export default function WatchMoviePage() {
             </Link>
             <Link
               underline="hover"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               color="inherit"
             >
               <Movie sx={{ mr: 0.5 }} />
@@ -64,7 +95,7 @@ export default function WatchMoviePage() {
             </Link>
             <Link
               underline="hover"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               color="inherit"
             >
               <PlayCircleOutline sx={{ mr: 0.5 }} />
@@ -121,11 +152,16 @@ export default function WatchMoviePage() {
                   key={index}
                   className={classNames(
                     "p-2 border-b-[0.2px] flex items-center space-x-2",
-                    darkMode ? "text-blue-100" : "text-black",
+                    darkMode ? "text-blue-100" : "text-black"
                   )}
                 >
-                  <AccountCircle fontSize="medium"/>
-                  <Rating name="read-only" value={fb.vote} readOnly size="small"/>
+                  <AccountCircle fontSize="medium" />
+                  <Rating
+                    name="read-only"
+                    value={fb.vote}
+                    readOnly
+                    size="small"
+                  />
                   <span className="ml-2">{fb.cmt}</span>
                 </div>
               ))}
@@ -145,17 +181,20 @@ export default function WatchMoviePage() {
                 name="size-large"
                 defaultValue={0}
                 value={valueVote}
-                onChange={(event, newValue) => {
-                  setValueVote(newValue);
-                }}
+                onChange={handleVoteChange}
                 // className={darkMode && 'text-white'}
-                emptyIcon={<StarIcon style={{ opacity: !darkMode ? 0.55 : 1 }} fontSize="inherit" />}
+                emptyIcon={
+                  <StarIcon
+                    style={{ opacity: !darkMode ? 0.55 : 1 }}
+                    fontSize="inherit"
+                  />
+                }
               />
             </div>
-            
+
             {/* comment */}
             <div className="mt-4 flex items-center space-x-4">
-              <AccountBox fontSize="large"/>
+              <AccountBox fontSize="large" />
               <input
                 type="text"
                 value={commentInput}

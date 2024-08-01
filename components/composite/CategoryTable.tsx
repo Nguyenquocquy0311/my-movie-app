@@ -89,7 +89,7 @@ const CategoryTable: React.FC = () => {
           count={pages}
           page={page}
           onChange={(event, value) => setPage(value)}
-          color="secondary"
+          color="primary"
         />
       </div>
       <TableContainer component={Paper}>
