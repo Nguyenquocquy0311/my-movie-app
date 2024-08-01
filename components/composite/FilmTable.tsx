@@ -155,7 +155,7 @@ const FilmTable: React.FC = () => {
           count={pages}
           page={page}
           onChange={(event, value) => setPage(value)}
-          color="primary"
+          color="secondary"
         />
       </div>
       <TableContainer component={Paper}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFilmContext } from "../../context/FilmContext";
 import Header from "../common/header/Header";
 import Footer from "../common/Footer";
@@ -13,49 +13,94 @@ import {
   Movie,
   PlayCircleOutline,
 } from "@mui/icons-material";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { current } from "immer";
 
 interface Feedback {
-  vote: number;
-  cmt: string | null;
+  movieId: number,
+  vote: number,
+  comment: string | null;
 }
 
 export default function WatchMoviePage() {
-  const { currentFilm } = useFilmContext();
+  const router = useRouter();
+  // const { currentFilm } = useFilmContext();
   const { darkMode } = useDarkMode();
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [commentInput, setCommentInput] = useState("");
   const [valueVote, setValueVote] = useState(0);
+  const [currentFilm, setCurrentFilm] = useState();
 
-  if (!currentFilm) {
-    return <div>No film selected</div>;
-  }
+  useEffect(() => {
+    if (!router.query.id) return;
 
-  const videoId = new URL(currentFilm.url).searchParams.get("v");
+    const fetchFeedback = async () => {
+      try {
+        const response = await axios.get<Feedback[]>(
+          "http://localhost:8080/api/feedback/get",
+          {
+            params: {
+              filmId: router.query.id,
+            },
+          }
+        );
+        setFeedback(response.data);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
 
-  const handleInputChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+    fetchFeedback();
+  }, [router.query.id]);
+
+  useEffect(() => {
+    if (!router.query.id) return;
+
+    const fetchFilm = async () => {
+      try {
+        const response = await axios.get<Feedback[]>(
+          "http://localhost:8080/api/movie/getById",
+          {
+            params: { id: router.query.id },
+          }
+        );
+        console.log(response.data);
+        setCurrentFilm(response.data);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
+
+    fetchFilm();
+  }, [router.query.id]);
+
+  const videoId = currentFilm?.url
+    ? new URL(currentFilm?.url).searchParams.get("v")
+    : null;
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentInput(event.target.value);
   };
 
-  const handleVoteChange = (event: {
-    target: { value: React.SetStateAction<number> };
-  }) => {
-    setValueVote(event.target.value);
-  };
-
-  const handleSendFeedback = () => {
-    if (!window.localStorage.getItem("user-info")) {
-      alert("Đăng nhập để bình luận !!!");
-    } else {
-      if (commentInput.trim() !== "" || valueVote > 0) {
-        const newFeedback: Feedback = {
-          vote: valueVote,
-          cmt: commentInput || null,
-        };
+  const handleSendFeedback = async () => {
+    if (commentInput.trim() !== "" || valueVote > 0) {
+      const newFeedback: Feedback = {
+        movieId: currentFilm.id,
+        vote: valueVote,
+        comment: commentInput || null,
+      };
+      try {
+        await axios.post("http://localhost:8080/api/feedback/add", newFeedback, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+          }
+        });
         setFeedback([...feedback, newFeedback]);
         setCommentInput("");
-        setValueVote(0);
+        setValueVote(0); // Reset the vote after sending
+      } catch (error) {
+        console.error("Error sending feedback:", error);
       }
     }
   };
@@ -91,7 +136,7 @@ export default function WatchMoviePage() {
               color="inherit"
             >
               <Movie sx={{ mr: 0.5 }} />
-              {currentFilm.title}
+              {currentFilm?.title}
             </Link>
             <Link
               underline="hover"
@@ -107,7 +152,7 @@ export default function WatchMoviePage() {
           width="1200"
           height="600"
           src={`https://www.youtube.com/embed/${videoId}`}
-          title={currentFilm.title}
+          title={currentFilm?.title}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -130,7 +175,7 @@ export default function WatchMoviePage() {
               darkMode ? "text-slate-300" : "text-slate-800"
             )}
           >
-            {currentFilm.desc}
+            {currentFilm?.description}
           </p>
         </div>
 
@@ -147,9 +192,9 @@ export default function WatchMoviePage() {
 
           <div className="mb-6">
             <div className="mt-4 space-y-4">
-              {feedback.map((fb, index) => (
+              {feedback.map((fb) => (
                 <div
-                  key={index}
+                  key={fb.id}
                   className={classNames(
                     "p-2 border-b-[0.2px] flex items-center space-x-2",
                     darkMode ? "text-blue-100" : "text-black"
@@ -162,7 +207,7 @@ export default function WatchMoviePage() {
                     readOnly
                     size="small"
                   />
-                  <span className="ml-2">{fb.cmt}</span>
+                  <span className="ml-2">{fb.comment}</span>
                 </div>
               ))}
             </div>
@@ -181,8 +226,9 @@ export default function WatchMoviePage() {
                 name="size-large"
                 defaultValue={0}
                 value={valueVote}
-                onChange={handleVoteChange}
-                // className={darkMode && 'text-white'}
+                onChange={(event, newValue) => {
+                  setValueVote(newValue);
+                }}
                 emptyIcon={
                   <StarIcon
                     style={{ opacity: !darkMode ? 0.55 : 1 }}
