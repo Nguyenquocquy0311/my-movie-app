@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import {
   Container,
   Box,
@@ -12,30 +12,49 @@ import {
   Paper,
   CssBaseline,
   Divider,
-} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useDarkMode } from '../../context/darkModeContext';
-import classNames from 'classnames';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import EmailIcon from '@mui/icons-material/Email';
-
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useDarkMode } from "../../context/darkModeContext";
+import classNames from "classnames";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import EmailIcon from "@mui/icons-material/Email";
+import axios from "axios";
 const LoginPage = () => {
   const router = useRouter();
   const { darkMode } = useDarkMode();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (username === 'admin.com' && password === 'password') {
+    setError("");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/authen/login",
+        {
+          username,
+          password,
+        }
+      );
+      // Save token to localStorage or context
+      localStorage.setItem("token", response.data);
+      // Redirect user or show success message
+      router.push('/');
+    } catch (error) {
+      setError("Invalid username or password");
+    }
+
+<!--     if (username === 'admin.com' && password === 'password') {
       router.push('/admin');
     } else if (username === 'user.com' && password === 'password') {
       router.push('/');
       window.localStorage.setItem('user-info', username);
     } else {
       setError('Tên đăng nhập hoặc mật khẩu không đúng');
-    }
+
+    } -->
   };
 
   return (
@@ -43,22 +62,22 @@ const LoginPage = () => {
       <CssBaseline />
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
         }}
       >
-        <Paper elevation={6} className={classNames( 'p-6')}>
+        <Paper elevation={6} className={classNames("p-6")}>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -77,10 +96,10 @@ const LoginPage = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 InputProps={{
-                  className: 'text-black',
+                  className: "text-black",
                 }}
                 InputLabelProps={{
-                  className: 'text-gray-700',
+                  className: "text-gray-700",
                 }}
               />
               <TextField
@@ -95,10 +114,10 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 InputProps={{
-                  className: 'text-black',
+                  className: "text-black",
                 }}
                 InputLabelProps={{
-                  className: 'text-gray-700',
+                  className: "text-gray-700",
                 }}
               />
               {error && (
@@ -115,7 +134,7 @@ const LoginPage = () => {
               >
                 Đăng nhập
               </Button>
-              
+
               <Divider sx={{ my: 2 }}>or</Divider>
 
               <Button
@@ -125,7 +144,7 @@ const LoginPage = () => {
                 sx={{ mb: 1 }}
                 className="hover:bg-blue-600 hover:text-white"
               >
-                Đăng nhập bằng Email
+                Đăng nhập bằng Google
               </Button>
 
               <Button

@@ -4,12 +4,28 @@ import { useSearchModal } from "../../../context/SearchContext";
 import { useDarkMode } from "../../../context/darkModeContext";
 import classNames from "classnames";
 import { SearchOutlined } from "@mui/icons-material";
+import axios from "axios";
+import { Page } from "@/components/composite/ListFilm";
 import { Film } from "@/types/film";
 import { useFilmContext } from "@/context/FilmContext";
 import { useRouter } from "next/router";
 
 const SearchModal = () => {
   const { open, setOpen } = useSearchModal();
+  const [keyword, setKeyword] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<Film[]>([]);
+
+  const doSearch = async (keyword: string) => {
+    const resp = await axios.get<Page<Film>>(
+      "http://localhost:8080/api/movie/get",
+      { params: { keyword } }
+    );
+    setSearchResult(resp.data.content);
+  };
+
+  useEffect(() => {
+    doSearch(keyword);
+  }, [keyword]);
 
   const { darkMode } = useDarkMode();
   const { setCurrentFilm } = useFilmContext();
@@ -289,6 +305,7 @@ const SearchModal = () => {
           )}
         />
       </DialogContent>
+
       {keyword.trim() !== "" && (
         <ul
           className={classNames("p-4", darkMode && "bg-slate-700 text-white")}

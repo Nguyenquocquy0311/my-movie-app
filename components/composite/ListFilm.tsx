@@ -14,6 +14,26 @@ import { useFilmType } from "../../context/filmTypeContext";
 import { useDarkMode } from "../../context/darkModeContext";
 import { useFilmContext } from "../../context/FilmContext";
 import { useRouter } from "next/router";
+import axios from "axios";
+
+interface Page<T> {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: T[];
+}
+
+interface Film {
+  title: string;
+  director: string;
+  year: number;
+  image: string;
+  subImage: string;
+  url: string;
+  type: string;
+  desc: string;
+}
+
 import { Film } from "@/types/film";
 
 const ListFilm = () => {
@@ -238,22 +258,30 @@ const ListFilm = () => {
   const [films, setFilms] = useState<Film[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [page, setPage] = useState(1);
-  const filmsPerPage = 8;
+  const [totalPages, setTotalPages] = useState(1);
+  const filmsPerPage = 12;
   const { darkMode } = useDarkMode();
   const { filmType } = useFilmType();
   const { setCurrentFilm } = useFilmContext();
   const router = useRouter();
 
+  const doFetchFilms = async (type?: string) => {
+    const resp = await axios.get<Page<Movie>>(
+      "http://localhost:8080/api/movie/get",
+      { params: { typeId: type, page: page } }
+    );
+    setFilms(resp.data.content);
+    setTotalPages(resp.data.totalPages);
+  };
+
   useEffect(() => {
     const type = filmType;
     if (type) {
-      const filteredFilms = filmJson.filter((film) => film.type.includes(type));
-      setFilms(filteredFilms);
+      doFetchFilms(type);
     } else {
-      setFilms(filmJson);
+      doFetchFilms();
     }
-    setPage(1);
-  }, [filmType]);
+  }, [filmType, page]);
 
   useEffect(() => {
     if (films.length > 0) {
@@ -272,16 +300,16 @@ const ListFilm = () => {
     setPage(value);
   };
 
-  const paginatedFilms = films.slice(
-    (page - 1) * filmsPerPage,
-    page * filmsPerPage
-  );
+  // const paginatedFilms = films.slice(
+  //   (page - 1) * filmsPerPage,
+  //   page * filmsPerPage
+  // );
 
   const handleDetailsClick = (film: Film) => {
     setCurrentFilm(film);
     router.push("/movie");
   };
-
+  console.log(films);
   return (
     <div className="px-24 mt-4 pb-8">
       {/* Section 1: Slider */}
@@ -295,7 +323,12 @@ const ListFilm = () => {
                 alt={films[currentIndex]?.title || "Default Title"}
                 className="h-[600px] object-cover"
               />
-              <CardContent className={classNames("absolute bottom-4 left-4 bg-gray-800 text-white p-4 rounded-lg", darkMode ? 'bg-opacity-90' : 'bg-opacity-30')}>
+              <CardContent
+                className={classNames(
+                  "absolute bottom-4 left-4 bg-gray-800 text-white p-4 rounded-lg",
+                  darkMode ? "bg-opacity-90" : "bg-opacity-30"
+                )}
+              >
                 <Typography variant="h5" className="mb-2">
                   {films[currentIndex]?.title || "Default Title"}
                 </Typography>
@@ -321,11 +354,14 @@ const ListFilm = () => {
       </div>
 
       {/* Section 2: Grid */}
-      <Typography variant="h4" className="text-blue-600 pb-6 font-bold border-t-[2px] border-blue-500">
+      <Typography
+        variant="h4"
+        className="text-blue-600 pb-6 font-bold border-t-[2px] border-blue-500"
+      >
         Phim nổi bật
       </Typography>
       <Grid container spacing={4}>
-        {paginatedFilms.map((film, index) => (
+        {films.map((film, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
               className={classNames(
@@ -335,11 +371,13 @@ const ListFilm = () => {
             >
               <CardMedia
                 component="img"
-                image={film.subImage}
+                image={film.image}
                 alt={film.title}
                 className="h-[300px] object-cover"
               />
-              <CardContent className={classNames(darkMode && 'text-white bg-slate-900')}>
+              <CardContent
+                className={classNames(darkMode && "text-white bg-slate-900")}
+              >
                 <Typography variant="h6" className="font-bold mb-2">
                   {film.title}
                 </Typography>
@@ -370,7 +408,7 @@ const ListFilm = () => {
         className={classNames(darkMode ? "text-white" : "")}
       >
         <Pagination
-          count={Math.ceil(films.length / filmsPerPage)}
+          count={totalPages}
           page={page}
           onChange={handlePageChange}
           color="primary"

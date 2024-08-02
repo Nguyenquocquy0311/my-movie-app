@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Home, Movie } from "@mui/icons-material";
+import {current} from "immer";
 
 export default function PreviewPage() {
   const { currentFilm } = useFilmContext();
@@ -89,7 +90,7 @@ export default function PreviewPage() {
                   <b>Năm ra mắt:</b> {currentFilm.year}
                 </Typography>
                 <Typography variant="subtitle2" className="mb-1">
-                  <b>Thể loại:</b> {theloai}
+                  <b>Thể loại:</b> {currentFilm.types?.join(", ")}
                 </Typography>
                 <Typography variant="subtitle2" className="mb-1">
                   <b>Chất lượng:</b> HD
@@ -98,7 +99,7 @@ export default function PreviewPage() {
                   <b>Phụ đề:</b> Vietsub
                 </Typography>
                 <Typography variant="subtitle1" className="mb-4">
-                  <b>Nội dung:</b> {currentFilm.desc}
+                  <b>Nội dung:</b> {currentFilm.description}
                 </Typography>
               </div>
               <Button

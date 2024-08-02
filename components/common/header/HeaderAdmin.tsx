@@ -5,7 +5,6 @@ import { CirclePlusIcon } from "../icon/CirclePlucIcon";
 import Tooltip from '@mui/material/Tooltip';
 import { useSelector } from "react-redux";
 import { getDanhMucTab, getPhimTab } from "@/slices/redux";
-import { Avatar } from "@mui/material";
 
 const HeaderAdmin = ({onClick, title}) => {
   const router = useRouter()
@@ -24,9 +23,6 @@ const HeaderAdmin = ({onClick, title}) => {
           <div className="ml-4 text-blue-500 hover:text-blue-700" onClick={onClick}><CirclePlusIcon /></div>
         </Tooltip> }
         <p className="text-[20px] font-semibold mx-4">{title}</p>
-      </div>
-      <div className="px-6 cursor-pointer">
-        <Avatar/>
       </div>
     </HeaderLayout>
   );
