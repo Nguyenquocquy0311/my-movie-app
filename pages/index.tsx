@@ -2,6 +2,7 @@ import Layout from "../components/Layout";
 import LandingPage from "../components/pages/LandingPage";
 import SearchModal from "../components/composite/modal/SearchModal";
 import React from "react";
+import DonateModal from "@/components/composite/modal/DonateModal";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
     >
       <LandingPage />
       <SearchModal />
+      <DonateModal/>
     </Layout>
   );
 }

@@ -10,9 +10,11 @@ import {
 import { Tooltip } from "@mui/material";
 import { useFilmType } from "@/context/filmTypeContext";
 import { useRouter } from "next/router";
+import { useDonateModal } from "@/context/DonateContext";
 
 const Footer = () => {
   const { setFilmType } = useFilmType();
+  const { setOpen } = useDonateModal();
   const router = useRouter()
 
   const scrollToTop = () => {
@@ -24,6 +26,10 @@ const Footer = () => {
     router.push('/').then(() => {
       window.scrollTo({ top: 500, behavior: "smooth" });
     });
+  }
+
+  const handleOpenDonate = () => {
+    setOpen(true);
   }
 
   return (
@@ -65,12 +71,13 @@ const Footer = () => {
             </div>
             <div className="w-1/3">
               <div className="text-xl font-bold">Ủng hộ</div>
-              <Tooltip title="Sự ủng hộ của các bạn là niềm vui lớn nhất cho đội ngũ nhà phát triển sản phẩm này !!!">
+              <Tooltip title="Sự ủng hộ của các bạn là niềm vui lớn nhất cho đội ngũ nhà phát triển sản phẩm này !!! Hãy bấm vào đây để ủng hộ chúng tôi <3">
                 <img
                   src="https://qrcode-gen.com/images/qrcode-default.png"
                   width={60}
                   height={60}
                   className="mt-2"
+                  onClick={handleOpenDonate}
                 />
               </Tooltip>
 
