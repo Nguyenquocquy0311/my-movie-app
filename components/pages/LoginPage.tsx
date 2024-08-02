@@ -44,8 +44,17 @@ const LoginPage = () => {
       router.push('/');
     } catch (error) {
       setError("Invalid username or password");
-    } finally {
     }
+
+<!--     if (username === 'admin.com' && password === 'password') {
+      router.push('/admin');
+    } else if (username === 'user.com' && password === 'password') {
+      router.push('/');
+      window.localStorage.setItem('user-info', username);
+    } else {
+      setError('Tên đăng nhập hoặc mật khẩu không đúng');
+
+    } -->
   };
 
   return (

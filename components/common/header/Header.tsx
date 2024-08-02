@@ -51,7 +51,8 @@ const Header = () => {
     if (router.pathname !== "/") {
       router.push("/");
     } else {
-      window.location.reload();
+      setIsActive(null);
+      setFilmType(null);
     }
   };
 
@@ -135,9 +136,14 @@ const Header = () => {
         >
           {!darkMode ? <DarkModeOutlined /> : <LightMode />}
         </Tooltip>
-
-        <Tooltip title={"Đăng nhập"} className="cursor-pointer my-auto">
-          <Login />
+                
+        <Tooltip
+          title={window.localStorage.getItem('user-info') ? window.localStorage.getItem('user-info') : 'Đăng nhập'}
+          className="cursor-pointer my-auto"
+          onClick={() => router.push('/login')}  
+        >
+        {!window.localStorage.getItem('user-info') ? <Login/> : <Avatar/>}
+        {/* <Login /> */}
         </Tooltip>
       </div>
     </div>

@@ -33,7 +33,7 @@ export default function PreviewPage() {
   }
 
   const handleWatchFilm = () => {
-    router.push(`/movie/watch-movie/${currentFilm.id}`);
+    router.push(`/movie/${currentFilm.title}`);
   };
 
   return (
