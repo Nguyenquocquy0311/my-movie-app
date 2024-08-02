@@ -14,17 +14,7 @@ import { useFilmType } from "../../context/filmTypeContext";
 import { useDarkMode } from "../../context/darkModeContext";
 import { useFilmContext } from "../../context/FilmContext";
 import { useRouter } from "next/router";
-
-interface Film {
-  title: string;
-  director: string;
-  year: number;
-  image: string;
-  subImage: string;
-  url: string;
-  type: string;
-  desc: string;
-}
+import { Film } from "@/types/film";
 
 const ListFilm = () => {
   const filmJson = [
@@ -136,7 +126,7 @@ const ListFilm = () => {
       desc: "Upgraded 2024 là một bộ phim hài lãng mạn đầy sáng tạo, đã được phát hành trên Amazon Prime Video vào ngày 9 tháng 2 năm 2024. Câu chuyện xoay quanh cuộc sống của Ana, một cô gái trẻ đầy tham vọng và mơ ước về một sự nghiệp trong lĩnh vực nghệ thuật. Trong quá trình cố gắng để gây ấn tượng với sếp khó tính của mình, Claire, Ana đã vô tình gặp Will, một chàng trai lịch lãm và quyến rũ. Một sự nhầm lẫn nhỏ đã khiến Ana trở thành sếp của mình. Với lời nói dối này, cuộc sống của cô bắt đầu thay đổi hoàn toàn. Ana và Will dần trở nên thân thiết và tình cảm giữa họ nảy nở. Tuy nhiên, những rắc rối và tình huống dở khóc dở cười không ngừng xảy ra khi Ana phải duy trì lời nói dối của mình để không bị phát hiện.",
     },
     {
-      title: "The Shawshank Redemption",
+      title: "Shawshank Redemption",
       director: "Frank Darabont",
       year: 1994,
       image:
