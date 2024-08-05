@@ -14,7 +14,7 @@ import { useDonateModal } from "@/context/DonateContext";
 
 const Footer = () => {
   const { setFilmType } = useFilmType();
-  const { setOpen } = useDonateModal();
+  const { setOpenDonate } = useDonateModal();
   const router = useRouter()
 
   const scrollToTop = () => {
@@ -29,7 +29,7 @@ const Footer = () => {
   }
 
   const handleOpenDonate = () => {
-    setOpen(true);
+    setOpenDonate(true);
   }
 
   return (

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Film } from '@/types/film';
 
 interface EditFilmModalProps {
   open: boolean;
@@ -9,23 +12,46 @@ interface EditFilmModalProps {
 }
 
 const EditFilmModal: React.FC<EditFilmModalProps> = ({ open, onClose, film, onSave }) => {
-  const [editedFilm, setEditedFilm] = useState<Film>(film || {
-    id: 0,
-    title: '',
-    director: '',
-    year: 0,
-    view: 0,
-    like: 0,
-  });
+  const [editedFilm, setEditedFilm] = useState<Film | null>(null);
 
-  const handleSave = () => {
-    onSave(editedFilm);
-    onClose();
+  useEffect(() => {
+    if (film) {
+      setEditedFilm(film);
+    }
+  }, [film]);
+
+  const handleSave = async () => {
+    if (!editedFilm) return;
+
+    try {
+      const response = await fetch(`/api/films/${editedFilm.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedFilm),
+      });
+
+      if (!response.ok) {
+        throw new Error('Lỗi cập nhật dữ liệu');
+      }
+
+      const result = await response.json();
+      onSave(result);
+      toast.success('Cập nhật phim thành công!');
+      onClose();
+    } catch (error) {
+      toast.error('Cập nhật phim thất bại');
+    }
   };
+
+  if (!editedFilm) return null;
+
+  const filmTypes = ["phim-le", "phim-bo", "tv-show", "anime"];
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Chỉnh sửa thông tin phim</DialogTitle>
+      <DialogTitle className='text-center text-[24px] font-bold'>Cập nhật thông tin phim</DialogTitle>
       <DialogContent>
         <TextField
           margin="dense"
@@ -51,24 +77,36 @@ const EditFilmModal: React.FC<EditFilmModalProps> = ({ open, onClose, film, onSa
         />
         <TextField
           margin="dense"
-          label="Lượt xem"
+          label="Ảnh nền"
           fullWidth
-          type="number"
-          value={editedFilm.view}
-          onChange={(e) => setEditedFilm({ ...editedFilm, view: Number(e.target.value) })}
+          value={editedFilm.image}
+          onChange={(e) => setEditedFilm({ ...editedFilm, image: e.target.value })}
         />
+        <FormControl fullWidth margin="dense">
+          <InputLabel>Thể loại</InputLabel>
+          <Select
+            value={editedFilm.type}
+            onChange={(e) => setEditedFilm({ ...editedFilm, type: e.target.value })}
+            label="Thể loại"
+          >
+            {filmTypes.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           margin="dense"
-          label="Lượt thích"
+          label="Link xem"
           fullWidth
-          type="number"
-          value={editedFilm.like}
-          onChange={(e) => setEditedFilm({ ...editedFilm, like: Number(e.target.value) })}
+          value={editedFilm.url}
+          onChange={(e) => setEditedFilm({ ...editedFilm, url: e.target.value })}
         />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">Hủy</Button>
-        <Button onClick={handleSave} color="primary">Lưu</Button>
+        <Button onClick={handleSave} color="primary" variant='contained'>Lưu</Button>
       </DialogActions>
     </Dialog>
   );

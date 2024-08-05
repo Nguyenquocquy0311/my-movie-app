@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface DonateModalContextProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  openDonate: boolean;
+  setOpenDonate: (open: boolean) => void;
 }
 
 const DonateModalContext = createContext<DonateModalContextProps | undefined>(undefined);
@@ -16,10 +16,10 @@ export const useDonateModal = () => {
 };
 
 export const DonateModalProvider = ({ children }: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+  const [openDonate, setOpenDonate] = useState(false);
 
   return (
-    <DonateModalContext.Provider value={{ open, setOpen }}>
+    <DonateModalContext.Provider value={{ openDonate, setOpenDonate }}>
       {children}
     </DonateModalContext.Provider>
   );

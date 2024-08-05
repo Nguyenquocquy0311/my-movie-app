@@ -4,14 +4,14 @@ import { useDonateModal } from "@/context/DonateContext";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DonateModal = () => {
-  const { open, setOpen } = useDonateModal();
+  const { openDonate, setOpenDonate } = useDonateModal();
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenDonate(false);
   };
 
   return (
-    <Dialog open={open} maxWidth="md" fullWidth onClose={handleClose}>
+    <Dialog open={openDonate} maxWidth="md" fullWidth onClose={handleClose}>
       <div className="relative">
         <IconButton
           onClick={handleClose}

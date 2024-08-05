@@ -8,6 +8,7 @@ import { FilmProvider } from "../context/FilmContext";
 import React from "react";
 import { SearchModalProvider } from "../context/SearchContext";
 import { DonateModalProvider } from "@/context/DonateContext";
+import { ToastContainer } from 'react-toastify';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <SearchModalProvider>
               <DonateModalProvider>
                 <Component {...pageProps} />
+                <ToastContainer />
               </DonateModalProvider>
             </SearchModalProvider>
           </FilmTypeProvider>

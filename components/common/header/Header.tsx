@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { Avatar, Button, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import {
-  DarkMode,
   DarkModeOutlined,
   LightMode,
-  Login,
   SearchOutlined,
 } from "@mui/icons-material";
 import { useFilmType } from "../../../context/filmTypeContext";
 import { useDarkMode } from "../../../context/darkModeContext";
 import { useSearchModal } from "../../../context/SearchContext";
+import { useDonateModal } from "@/context/DonateContext";
 
 const Header = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
   const router = useRouter();
   const [isActive, setIsActive] = useState<string | null>(null);
   const { setFilmType } = useFilmType();
-  const { open, setOpen } = useSearchModal();
+  const { setOpen } = useSearchModal();
+  const { setOpenDonate } = useDonateModal()
+  const [userInfo, setUserInfo] = useState<string | null>(null);
 
   const handleDarkTheme = () => {
     toggleDarkMode();
@@ -45,6 +46,17 @@ const Header = () => {
   const handleOpenSearchModal = () => {
     setOpen(true);
   };
+
+  const handleOpenDonate = () => {
+    setOpenDonate(true);
+  }
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserInfo = window.localStorage.getItem("user-info");
+      setUserInfo(storedUserInfo);
+    }
+  }, []);
 
   return (
     <div
@@ -104,35 +116,44 @@ const Header = () => {
           </div>
         </div>
         <div className={classNames("flex")}>
-          <div
-            className={classNames(
-              "my-auto p-3 rounded-md cursor-pointer border-none hover:border-none hover:bg-slate-300"
-            )}
-            onClick={handleOpenSearchModal}
-          >
+          <Tooltip title={'Tìm kiếm phim'}>
             <SearchOutlined
               className={classNames(
-                darkMode ? "text-white hover:text-black" : "text-black"
+                 'hover:opacity-60 my-auto cursor-pointer'
               )}
+              onClick={handleOpenSearchModal}
             />
-          </div>
+          </Tooltip>
         </div>
         <Tooltip
           title={darkMode ? "Tắt chế độ tối" : "Bật chế độ tối"}
-          className="cursor-pointer my-auto"
+          className="cursor-pointer my-auto hover:text-slate-500"
           onClick={handleDarkTheme}
         >
           {!darkMode ? <DarkModeOutlined /> : <LightMode />}
         </Tooltip>
-                
+
         <Tooltip
-          title={window.localStorage.getItem('user-info') ? window.localStorage.getItem('user-info') : 'Đăng nhập'}
+          title={userInfo ? userInfo : "Đăng nhập"}
           className="cursor-pointer my-auto"
-          onClick={() => router.push('/login')}  
+          onClick={() => router.push("/login")}
         >
-        {!window.localStorage.getItem('user-info') ? <Login/> : <Avatar/>}
-        {/* <Login /> */}
+          {userInfo == null ? <button className={classNames(darkMode ? 'bg-slate-200 text-slate-800' : 'bg-blue-600 text-white', 'px-5 py-2 font-bold rounded-3xl')}>Đăng nhập</button> : <Avatar />}
         </Tooltip>
+        <div className="relative group my-auto" onClick={handleOpenDonate}>
+          <p className="hover:opacity-50 cursor-pointer font-bold">Đóng góp</p>
+          <div className={classNames(darkMode ? 'bg-slate-700' : 'bg-gray-200', "absolute hidden group-hover:block p-4 rounded-lg shadow-lg left-5 top-full transform translate-x-[-50%] w-52 h-auto mt-4")}>
+            <div className="text-center">
+              <p className={classNames(darkMode ? 'text-white' : 'text-slate-800', "mb-2 text-sm font-semibold")}>Ủng hộ chúng tôi tại đây</p>
+              <img
+                src="https://qrcode-gen.com/images/qrcode-default.png"
+                alt="QR Code"
+                loading="lazy"
+                className="rounded-md w-32 h-32 mx-auto"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
