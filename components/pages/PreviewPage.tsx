@@ -70,7 +70,7 @@ export default function PreviewPage() {
           </Breadcrumbs>
         </div>
         <Box mb={4}>
-          <Card className="flex flex-col md:flex-row">
+          <Card className={classNames(darkMode && 'bg-slate-900 text-white', "flex flex-col md:flex-row")}>
             <CardMedia
               component="img"
               image={currentFilm.image}

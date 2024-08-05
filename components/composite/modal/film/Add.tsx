@@ -7,6 +7,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { Film } from "@/types/film";
 
 interface AddFilmModalProps {
   open: boolean;
@@ -24,8 +25,10 @@ const AddFilmModal: React.FC<AddFilmModalProps> = ({
     title: "",
     director: "",
     year: 0,
-    view: 0,
-    like: 0,
+    image: "",
+    url: "",
+    type: "",
+    desc: "",
   });
 
   const handleSave = () => {
@@ -64,22 +67,38 @@ const AddFilmModal: React.FC<AddFilmModalProps> = ({
         />
         <TextField
           margin="dense"
-          label="Lượt xem"
+          label="Ảnh nền"
           fullWidth
-          type="number"
-          value={newFilm.view}
+          value={newFilm.image}
           onChange={(e) =>
-            setNewFilm({ ...newFilm, view: Number(e.target.value) })
+            setNewFilm({ ...newFilm, image: e.target.value })
           }
         />
         <TextField
           margin="dense"
-          label="Lượt thích"
+          label="Thể loại"
           fullWidth
-          type="number"
-          value={newFilm.like}
+          value={newFilm.type}
           onChange={(e) =>
-            setNewFilm({ ...newFilm, like: Number(e.target.value) })
+            setNewFilm({ ...newFilm, type: e.target.value })
+          }
+        />
+        <TextField
+          margin="dense"
+          label="Link xem"
+          fullWidth
+          value={newFilm.url}
+          onChange={(e) =>
+            setNewFilm({ ...newFilm, url: e.target.value })
+          }
+        />
+        <TextField
+          margin="dense"
+          label="Nội dung"
+          fullWidth
+          value={newFilm.desc}
+          onChange={(e) =>
+            setNewFilm({ ...newFilm, desc: e.target.value })
           }
         />
       </DialogContent>
