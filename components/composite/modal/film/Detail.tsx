@@ -51,7 +51,9 @@ const DetailFilmModal: React.FC<DetailFilmModalProps> = ({ open, onClose, film }
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Đóng</Button>
+        <Button onClick={onClose} color="primary" variant="contained" className='mx-auto'>
+          Đóng
+        </Button>
       </DialogActions>
     </Dialog>
   );

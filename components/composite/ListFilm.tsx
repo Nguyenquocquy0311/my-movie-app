@@ -143,6 +143,7 @@ const ListFilm = () => {
                 "cursor-pointer hover:shadow-2xl transition-shadow duration-300",
                 darkMode ? "hover:shadow-slate-500" : "hover:shadow-gray-900"
               )}
+              onClick={() => handleDetailsClick(film)}
             >
               <CardMedia
                 component="img"

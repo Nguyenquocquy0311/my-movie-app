@@ -7,8 +7,6 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { Film } from "@/types/film";
-import { toast } from "react-toastify"; 
 
 interface AddFilmModalProps {
   open: boolean;
@@ -85,25 +83,7 @@ const AddFilmModal: React.FC<AddFilmModalProps> = ({
         />
         <TextField
           margin="dense"
-          label="Ảnh nền"
-          fullWidth
-          value={newFilm.image}
-          onChange={(e) =>
-            setNewFilm({ ...newFilm, image: e.target.value })
-          }
-        />
-        <TextField
-          margin="dense"
-          label="Thể loại"
-          fullWidth
-          value={newFilm.type}
-          onChange={(e) =>
-            setNewFilm({ ...newFilm, type: e.target.value })
-          }
-        />
-        <TextField
-          margin="dense"
-          label="Link phim"
+          label="Lượt xem"
           fullWidth
           value={newFilm.url}
           onChange={(e) =>

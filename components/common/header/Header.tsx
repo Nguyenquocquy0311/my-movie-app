@@ -129,7 +129,7 @@ const Header = () => {
         </div>
         <Tooltip
           title={darkMode ? "Tắt chế độ tối" : "Bật chế độ tối"}
-          className="cursor-pointer my-auto"
+          className="cursor-pointer my-auto hover:text-slate-500"
           onClick={handleDarkTheme}
         >
           {!darkMode ? <DarkModeOutlined /> : <LightMode />}
@@ -138,7 +138,7 @@ const Header = () => {
         {!userInfo ?<Tooltip
           title={'Đăng nhập'}
           className="cursor-pointer my-auto"
-          onClick={() => router.push('/login')}  
+          onClick={() => router.push("/login")}
         >
           <Login />
         </Tooltip>

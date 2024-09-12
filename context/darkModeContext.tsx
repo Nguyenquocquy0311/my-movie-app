@@ -33,7 +33,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) 
   }, [darkMode]);
 
   const toggleDarkMode = () => {
-    setDarkMode(prevMode => !prevMode);
+    setDarkMode(!darkMode);
   };
 
   return (

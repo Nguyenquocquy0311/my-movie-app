@@ -16,38 +16,22 @@ const EditFilmModal: React.FC<EditFilmModalProps> = ({ open, onClose, film, onSa
     title: '',
     director: '',
     year: 0,
-    image: '',
-    url: '',
-    type: '',
-    desc: '',
+    view: 0,
+    like: 0,
   });
 
-  const handleSave = async () => {
-    try {
-      const response = await fetch(`/api/films${film ? film.id : editedFilm.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editedFilm),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      onSave(editedFilm);
-      toast.success('Cập nhật thông tin phim thành công !!!')
-      onClose();
-    } catch (error) {
-      console.error('Failed to save film:', error);
-      toast.error('Đã có lỗi xảy ra khi cập nhật phim !!!')
-    }
+  const handleSave = () => {
+    onSave(editedFilm);
+    onClose();
   };
+
+  if (!editedFilm) return null;
+
+  const filmTypes = ["phim-le", "phim-bo", "tv-show", "anime"];
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle className='text-center text-[24px] font-bold'>Chỉnh sửa thông tin phim</DialogTitle>
+      <DialogTitle>Chỉnh sửa thông tin phim</DialogTitle>
       <DialogContent>
         <TextField
           margin="dense"
@@ -73,38 +57,24 @@ const EditFilmModal: React.FC<EditFilmModalProps> = ({ open, onClose, film, onSa
         />
         <TextField
           margin="dense"
-          label="Ảnh bìa"
+          label="Lượt xem"
           fullWidth
-          value={editedFilm.image}
-          onChange={(e) => setEditedFilm({ ...editedFilm, image: e.target.value })}
+          type="number"
+          value={editedFilm.view}
+          onChange={(e) => setEditedFilm({ ...editedFilm, view: Number(e.target.value) })}
         />
         <TextField
           margin="dense"
-          label="URL"
+          label="Lượt thích"
           fullWidth
-          value={editedFilm.url}
-          onChange={(e) => setEditedFilm({ ...editedFilm, url: e.target.value })}
-        />
-        <TextField
-          margin="dense"
-          label="Thể loại"
-          fullWidth
-          value={editedFilm.type}
-          onChange={(e) => setEditedFilm({ ...editedFilm, type: e.target.value })}
-        />
-        <TextField
-          margin="dense"
-          label="Mô tả"
-          fullWidth
-          multiline
-          rows={4}
-          value={editedFilm.desc}
-          onChange={(e) => setEditedFilm({ ...editedFilm, desc: e.target.value })}
+          type="number"
+          value={editedFilm.like}
+          onChange={(e) => setEditedFilm({ ...editedFilm, like: Number(e.target.value) })}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary" variant='outlined'>Hủy</Button>
-        <Button onClick={handleSave} color="primary" variant='contained'>Lưu</Button>
+        <Button onClick={onClose} color="primary">Hủy</Button>
+        <Button onClick={handleSave} color="primary">Lưu</Button>
       </DialogActions>
     </Dialog>
   );
