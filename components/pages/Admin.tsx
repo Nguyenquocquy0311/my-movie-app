@@ -11,11 +11,11 @@ import {
 } from "@/slices/redux";
 import MenuBar from "../common/Sidebar";
 import HeaderAdmin from "../common/header/HeaderAdmin";
-import FilmTable from "../composite/FilmTable";
+import FilmTable from "../composite/table/FilmTable";
 import { useDispatch, useSelector } from "react-redux";
-import CategoryTable from "@/components/composite/CategoryTable";
-import UserTable from "@/components/composite/UserTable";
-import FeedbackTable from "@/components/composite/FeedbackTable";
+import CategoryTable from "@/components/composite/table/CategoryTable";
+import UserTable from "@/components/composite/table/UserTable";
+import FeedbackTable from "@/components/composite/table/FeedbackTable";
 import AddFilmModal from "../composite/modal/film/Add";
 import AddCategoryModal from "../composite/modal/category/Add";
 

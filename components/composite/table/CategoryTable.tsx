@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, IconButton, Tooltip, Pagination } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Visibility as EyeIcon } from '@mui/icons-material';
-import EditCategoryModal from '../composite/modal/category/Edit';
-import DetailCategoryModal from '../composite/modal/category/Detail';
-import DeleteCategoryModal from '../composite/modal/category/Delete';
+import EditCategoryModal from '../modal/category/Edit';
+import DetailCategoryModal from '../modal/category/Detail';
+import DeleteCategoryModal from '../modal/category/Delete';
 
 interface Category {
   name: string;

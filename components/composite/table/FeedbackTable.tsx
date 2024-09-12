@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, IconButton, Tooltip, Pagination } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
-import DeleteFeedbackModal from '../composite/modal/feedback/Delete';
+import DeleteFeedbackModal from '../modal/feedback/Delete';
 
 interface Feedback {
   id: number;

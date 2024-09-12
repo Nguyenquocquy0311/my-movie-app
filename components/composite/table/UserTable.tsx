@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, IconButton, Tooltip, Pagination } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Visibility as EyeIcon } from '@mui/icons-material';
-import EditUserModal from '../composite/modal/user/Edit';
-import DetailUserModal from '../composite/modal/user/Detail';
-import DeleteUserModal from '../composite/modal/user/Delete';
-
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  role: string;
-  filmsWatched: number;
-  feedbackCount: number;
-}
+import EditUserModal from '../modal/user/Edit';
+import DetailUserModal from '../modal/user/Detail';
+import DeleteUserModal from '../modal/user/Delete';
+import { User } from '@/types/user';
 
 const UserTable: React.FC = () => {
   const [userData, setUserData] = useState<User[]>([]);
@@ -27,34 +19,37 @@ const UserTable: React.FC = () => {
       name: "Alice",
       username: "alice123",
       role: "Admin",
-      filmsWatched: 50,
-      feedbackCount: 10
     },
     {
       id: 2,
       name: "Bob",
       username: "bob456",
       role: "User",
-      filmsWatched: 30,
-      feedbackCount: 5
     },
     {
       id: 3,
       name: "Charlie",
       username: "charlie789",
       role: "User",
-      filmsWatched: 70,
-      feedbackCount: 20
     },
     {
       id: 4,
       name: "Diana",
       username: "diana101",
       role: "User",
-      filmsWatched: 40,
-      feedbackCount: 8
     },
   ];
+
+  // useEffect(() => {
+  //   fetch('api/users')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setUserData(data);
+  //     })
+  //     .catch(error => {
+  //       console.error("Error fetching user data: ", error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     setUserData(userJson);
@@ -80,16 +75,17 @@ const UserTable: React.FC = () => {
     setOpenDeleteModal(true);
   };
 
-  const handleSaveUser = (user: User) => {
-    setUserData(userData.map(u => u.id === user.id ? user : u));
-  };
-
   const handleDeleteUser = () => {
     if (selectedUser) {
       setUserData(userData.filter(u => u.id !== selectedUser.id));
     }
     setOpenDeleteModal(false);
   };
+
+  const handleSaveUser = (user: User) => {
+    setUserData(userData.map(u => u.id === user.id ? user : u));
+  };
+
 
   return (
     <div className="mx-auto bg-white mt-5 p-4 rounded-xl w-full h-[85vh]">
@@ -110,20 +106,16 @@ const UserTable: React.FC = () => {
               <TableCell align="center">Tên</TableCell>
               <TableCell align="center">Username</TableCell>
               <TableCell align="center">Vai trò</TableCell>
-              <TableCell align="center">Số phim đã xem</TableCell>
-              <TableCell align="center">Số feedback</TableCell>
               <TableCell align="center">Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentItems.map((user) => (
+            {currentItems.map((user, index) => (
               <TableRow key={user.id}>
-                <TableCell align="center">{(page - 1) * rowsPerPage + user.id}</TableCell>
+                <TableCell align="center">{(page - 1) * rowsPerPage + index + 1}</TableCell>
                 <TableCell align="center">{user.name}</TableCell>
                 <TableCell align="center">{user.username}</TableCell>
                 <TableCell align="center">{user.role}</TableCell>
-                <TableCell align="center">{user.filmsWatched}</TableCell>
-                <TableCell align="center">{user.feedbackCount}</TableCell>
                 <TableCell align="center">
                   <Tooltip title="Details">
                     <IconButton onClick={() => handleDetailUser(user)} className='text-blue-500'>
@@ -165,6 +157,7 @@ const UserTable: React.FC = () => {
             open={openDeleteModal}
             onClose={() => setOpenDeleteModal(false)}
             onDelete={handleDeleteUser}
+            user={selectedUser}
           />
         </>
       )}

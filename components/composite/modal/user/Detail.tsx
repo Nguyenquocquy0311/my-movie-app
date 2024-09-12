@@ -1,14 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  role: string;
-  filmsWatched: number;
-  feedbackCount: number;
-}
+import { User } from '@/types/user';
 
 interface DetailUserModalProps {
   open: boolean;
@@ -26,8 +18,6 @@ const DetailUserModal: React.FC<DetailUserModalProps> = ({ open, onClose, user }
         <p><strong>Tên:</strong> {user.name}</p>
         <p><strong>Username:</strong> {user.username}</p>
         <p><strong>Vai trò:</strong> {user.role}</p>
-        <p><strong>Số phim đã xem:</strong> {user.filmsWatched}</p>
-        <p><strong>Số feedback:</strong> {user.feedbackCount}</p>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">Đóng</Button>

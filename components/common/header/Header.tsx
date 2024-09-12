@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Avatar, Button, Tooltip } from "@mui/material";
+import { Avatar, Button, Divider, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
-  DarkMode,
   DarkModeOutlined,
   LightMode,
   Login,
+  Logout,
   SearchOutlined,
+  WorkspacePremium,
 } from "@mui/icons-material";
 import { useFilmType } from "../../../context/filmTypeContext";
 import { useDarkMode } from "../../../context/darkModeContext";
 import { useSearchModal } from "../../../context/SearchContext";
+import Auth from "@/context/AuthContext";
 
 const Header = () => {
+  const { logout } = Auth.useContainer();
   const { darkMode, toggleDarkMode } = useDarkMode();
   const router = useRouter();
   const [isActive, setIsActive] = useState<string | null>(null);
   const { setFilmType } = useFilmType();
   const { open, setOpen } = useSearchModal();
+  const [userInfo, setUserInfo] = useState<{
+    email?: string;
+    displayName?: string;
+    photoURL?: string;
+  } | null>(null);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleDarkTheme = () => {
     toggleDarkMode();
@@ -46,6 +56,29 @@ const Header = () => {
     setOpen(true);
   };
 
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserInfo = localStorage.getItem("user-info");
+      if (storedUserInfo) {
+        setUserInfo(JSON.parse(storedUserInfo));
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+    handleMenuClose();
+  };
+
   return (
     <div
       className={classNames(
@@ -66,56 +99,33 @@ const Header = () => {
             className={classNames(
               "p-4 uppercase hover:bg-slate-300 rounded-md cursor-pointer",
               darkMode && "hover:text-black",
-              isActive === "phim-bo" && "bg-slate-300 text-black"
+              isActive === "movie" && "bg-slate-300 text-black"
             )}
-            onClick={() => handleClickType("phim-bo")}
+            onClick={() => handleClickType("movie")}
           >
-            Phim bộ
+            Movie
           </div>
           <div
             className={classNames(
               "p-4 uppercase hover:bg-slate-300 rounded-md cursor-pointer",
               darkMode && "hover:text-black",
-              isActive === "phim-le" && "bg-slate-300 text-black"
+              isActive === "tv" && "bg-slate-300 text-black"
             )}
-            onClick={() => handleClickType("phim-le")}
+            onClick={() => handleClickType("tv")}
           >
-            Phim lẻ
-          </div>
-          <div
-            className={classNames(
-              "p-4 uppercase hover:bg-slate-300 rounded-md cursor-pointer",
-              darkMode && "hover:text-black",
-              isActive === "anime" && "bg-slate-300 text-black"
-            )}
-            onClick={() => handleClickType("anime")}
-          >
-            Anime
-          </div>
-          <div
-            className={classNames(
-              "p-4 uppercase hover:bg-slate-300 rounded-md cursor-pointer",
-              darkMode && "hover:text-black",
-              isActive === "tv-show" && "bg-slate-300 text-black"
-            )}
-            onClick={() => handleClickType("tv-show")}
-          >
-            TV Show
+            TV SHOW
           </div>
         </div>
         <div className={classNames("flex")}>
-          <div
-            className={classNames(
-              "my-auto p-3 rounded-md cursor-pointer border-none hover:border-none hover:bg-slate-300"
-            )}
-            onClick={handleOpenSearchModal}
-          >
+          <Tooltip title='Tìm kiếm phim'>
             <SearchOutlined
               className={classNames(
-                darkMode ? "text-white hover:text-black" : "text-black"
+                open && 'opacity-50',
+                'my-auto cursor-pointer hover:opacity-65'
               )}
+              onClick={handleOpenSearchModal}
             />
-          </div>
+          </Tooltip>
         </div>
         <Tooltip
           title={darkMode ? "Tắt chế độ tối" : "Bật chế độ tối"}
@@ -124,16 +134,43 @@ const Header = () => {
         >
           {!darkMode ? <DarkModeOutlined /> : <LightMode />}
         </Tooltip>
-                
-        <Tooltip
-          title={window.localStorage.getItem('user-info') ? window.localStorage.getItem('user-info') : 'Đăng nhập'}
+
+        {!userInfo ?<Tooltip
+          title={'Đăng nhập'}
           className="cursor-pointer my-auto"
           onClick={() => router.push('/login')}  
         >
-        {!window.localStorage.getItem('user-info') ? <Login/> : <Avatar/>}
-        {/* <Login /> */}
+          <Login />
         </Tooltip>
+           : <Avatar src={userInfo.photoURL || ""} className="my-auto cursor-pointer" onClick={handleMenuClick}/>}
       </div>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        MenuListProps={{
+          "aria-labelledby": "avatar-button",
+        }}
+        className="mt-2 text-center"
+      >
+        <MenuItem>
+          <Avatar src={userInfo?.photoURL} sizes="small" /><p className="mx-2 font-bold">{userInfo?.displayName}</p>
+        </MenuItem>
+        <MenuItem>
+          <Typography variant="body2">{userInfo?.email}</Typography>
+        </MenuItem>
+        <MenuItem>
+          <WorkspacePremium/><Typography variant="body2" className="mx-2">Tài khoản fan cứng</Typography>
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Đăng xuất
+        </MenuItem>
+      </Menu>
     </div>
   );
 };

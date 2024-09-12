@@ -21,18 +21,27 @@ export default function PreviewPage() {
   const { currentFilm } = useFilmContext();
   const router = useRouter();
   const { darkMode } = useDarkMode();
-  let theloai = "Phim bộ";
-
-  if (!currentFilm) {
-    return <div>No film selected</div>;
-  } else {
-    if (currentFilm.type == "phim-le") theloai = "Phim lẻ";
-    if (currentFilm.type == "tv-show") theloai = "TV Show";
-    if (currentFilm.type == "anime") theloai = "Anime";
-  }
 
   const handleWatchFilm = () => {
-    router.push(`/movie/${currentFilm.title}`);
+    router.push(`/movie/${currentFilm?.title}`);
+  };
+
+  const getGenreNames = (genreIds: number[]) => {
+    const genres = [
+      { id: 28, name: "Action" },
+      { id: 35, name: "Comedy" },
+      { id: 878, name: "Science Fiction" },
+      { id: 80, name: "Crime" },
+      { id: 53, name: "Thriller" },
+      { id: 27, name: "Horror" },
+      { id: 16, name: "Animation" },
+      { id: 10751, name: "Family" },
+      { id: 12, name: "Adventure" },
+    ];
+    return genreIds
+      .map((id) => genres.find((genre) => genre.id === id)?.name)
+      .filter((name) => name)
+      .join(", ");
   };
 
   return (
@@ -65,7 +74,7 @@ export default function PreviewPage() {
               color="inherit"
             >
               <Movie sx={{ mr: 0.5 }} />
-              {currentFilm.title}
+              {currentFilm?.title}
             </Link>
           </Breadcrumbs>
         </div>
@@ -73,23 +82,20 @@ export default function PreviewPage() {
           <Card className="flex flex-col md:flex-row">
             <CardMedia
               component="img"
-              image={currentFilm.image}
-              alt={currentFilm.title}
+              image={`https://image.tmdb.org/t/p/original${currentFilm?.poster_path}`}
+              alt={currentFilm?.title}
               className="md:w-1/3 h-auto"
             />
             <CardContent className="flex flex-col justify-between p-6 md:w-2/3">
               <div>
                 <Typography variant="h5" className="mb-2 font-bold">
-                  {currentFilm.title}
+                  {currentFilm?.title}
                 </Typography>
                 <Typography variant="subtitle2" className="mb-1">
-                  <b>Đạo diễn:</b> {currentFilm.director}
+                  <b>Năm ra mắt:</b> {currentFilm?.release_date}
                 </Typography>
                 <Typography variant="subtitle2" className="mb-1">
-                  <b>Năm ra mắt:</b> {currentFilm.year}
-                </Typography>
-                <Typography variant="subtitle2" className="mb-1">
-                  <b>Thể loại:</b> {theloai}
+                  <b>Thể loại:</b> {getGenreNames(currentFilm?.genre_ids || [])}
                 </Typography>
                 <Typography variant="subtitle2" className="mb-1">
                   <b>Chất lượng:</b> HD
@@ -97,8 +103,12 @@ export default function PreviewPage() {
                 <Typography variant="subtitle2" className="mb-1">
                   <b>Phụ đề:</b> Vietsub
                 </Typography>
+                <Typography variant="subtitle2" className="mb-1">
+                  <b>Lượt đánh giá:</b> {currentFilm?.vote_average} (
+                  {currentFilm?.vote_count} lượt)
+                </Typography>
                 <Typography variant="subtitle1" className="mb-4">
-                  <b>Nội dung:</b> {currentFilm.desc}
+                  <b>Giới thiệu:</b> {currentFilm?.overview}
                 </Typography>
               </div>
               <Button

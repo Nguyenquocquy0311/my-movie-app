@@ -1,14 +1,5 @@
+import { Film } from '@/types/film';
 import React, { createContext, useContext, ReactNode, useState } from 'react';
-
-interface Film {
-  title: string;
-  director: string;
-  year: number;
-  image: string;
-  url: string;
-  type: string;
-  desc: string;
-}
 
 interface FilmContextProps {
   currentFilm: Film | null;

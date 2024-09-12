@@ -7,6 +7,8 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { Film } from "@/types/film";
+import { toast } from "react-toastify"; 
 
 interface AddFilmModalProps {
   open: boolean;
@@ -20,17 +22,36 @@ const AddFilmModal: React.FC<AddFilmModalProps> = ({
   onSave,
 }) => {
   const [newFilm, setNewFilm] = useState<Film>({
-    id: 0,
     title: "",
     director: "",
     year: 0,
-    view: 0,
-    like: 0,
+    image: "",
+    url: "",
+    type: "",
+    desc: "",
   });
 
-  const handleSave = () => {
-    onSave(newFilm);
-    onClose();
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`/api/films`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newFilm),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      toast.success('Phim đã được thêm thành công!');
+      onSave(newFilm);
+      onClose();
+    } catch (error) {
+      toast.error('Lỗi khi thêm phim!');
+      console.error('Failed to add film:', error);
+    }
   };
 
   return (
@@ -64,22 +85,38 @@ const AddFilmModal: React.FC<AddFilmModalProps> = ({
         />
         <TextField
           margin="dense"
-          label="Lượt xem"
+          label="Ảnh nền"
           fullWidth
-          type="number"
-          value={newFilm.view}
+          value={newFilm.image}
           onChange={(e) =>
-            setNewFilm({ ...newFilm, view: Number(e.target.value) })
+            setNewFilm({ ...newFilm, image: e.target.value })
           }
         />
         <TextField
           margin="dense"
-          label="Lượt thích"
+          label="Thể loại"
           fullWidth
-          type="number"
-          value={newFilm.like}
+          value={newFilm.type}
           onChange={(e) =>
-            setNewFilm({ ...newFilm, like: Number(e.target.value) })
+            setNewFilm({ ...newFilm, type: e.target.value })
+          }
+        />
+        <TextField
+          margin="dense"
+          label="Link phim"
+          fullWidth
+          value={newFilm.url}
+          onChange={(e) =>
+            setNewFilm({ ...newFilm, url: e.target.value })
+          }
+        />
+        <TextField
+          margin="dense"
+          label="Nội dung"
+          fullWidth
+          value={newFilm.desc}
+          onChange={(e) =>
+            setNewFilm({ ...newFilm, desc: e.target.value })
           }
         />
       </DialogContent>

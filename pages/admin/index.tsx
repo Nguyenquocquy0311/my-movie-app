@@ -1,6 +1,8 @@
 import Layout from "../../components/Layout";
 import React from "react";
 import Admin from "@/components/pages/Admin";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminPage = () => {
   return (
@@ -13,6 +15,7 @@ const AdminPage = () => {
       noindex
     >
       <Admin />
+      <ToastContainer />
     </Layout>
   );
 };
